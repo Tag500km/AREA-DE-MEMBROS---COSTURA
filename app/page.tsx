@@ -1,5 +1,7 @@
+import Link from "next/link"
 import { MaterialCard } from "@/components/material-card"
-import { Scissors, Sparkles, Heart } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Scissors, Sparkles, Heart, BarChart3 } from "lucide-react"
 
 export default function MembersArea() {
   const materials = [
@@ -53,6 +55,14 @@ export default function MembersArea() {
         <div className="absolute inset-0 bg-[url('/sewing-thread-spools-fabric-texture-pattern.jpg')] opacity-5 bg-cover bg-center" />
 
         <div className="container relative mx-auto px-4 md:px-6">
+          <div className="mb-8 flex justify-end">
+            <Link href="/dashboard">
+              <Button className="gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Dashboard Financeiro
+              </Button>
+            </Link>
+          </div>
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
               <Sparkles className="h-4 w-4" />
