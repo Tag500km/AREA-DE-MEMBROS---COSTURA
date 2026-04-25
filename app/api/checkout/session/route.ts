@@ -1,17 +1,24 @@
-// TODO Part 2: create a Stripe Embedded Checkout Session.
-// Will return { client_secret } so the frontend mounts <EmbeddedCheckout />.
-// Key flags to remember:
-//   - ui_mode: "embedded"
-//   - mode: "payment"
-//   - customer_creation: "always"
-//   - payment_intent_data.setup_future_usage: "off_session"  (saves card for one-click upsells)
-//   - return_url: ${APP_URL}/upsell-1?session_id={CHECKOUT_SESSION_ID}
-
 import { NextResponse } from "next/server"
+import { stripe, PRICES, getAppUrl } from "@/lib/stripe"
 
 export async function POST() {
-  return NextResponse.json(
-    { error: "not implemented" },
-    { status: 501 },
-  )
+  if (!PRICES.main) {
+    return NextResponse.json(
+      { error: "STRIPE_PRICE_MAIN is not set" },
+      { status: 500 },
+    )
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    ui_mode: "embedded_page",
+    mode: "payment",
+    line_items: [{ price: PRICES.main, quantity: 1 }],
+    customer_creation: "always",
+    payment_intent_data: {
+      setup_future_usage: "off_session",
+    },
+    return_url: `${getAppUrl()}/upsell-1?session_id={CHECKOUT_SESSION_ID}`,
+  })
+
+  return NextResponse.json({ client_secret: session.client_secret })
 }
